@@ -3,7 +3,7 @@ import os
 import json
 from datetime import datetime
 
-TASKS_FILE = "simple-tasks.json"
+TASKS_FILE = "tasks.json"
 
 
 class Task:
