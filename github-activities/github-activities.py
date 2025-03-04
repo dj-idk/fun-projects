@@ -1,3 +1,7 @@
+"""
+Fetch Github User Activities with Python
+"""
+
 import requests
 import json
 import sys

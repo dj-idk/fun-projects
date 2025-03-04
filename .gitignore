@@ -45,5 +45,17 @@ coverage.xml
 .DS_Store
 Thumbs.db
 
-# JSON files
+# Miscellaneous files
 *.json
+*.md
+*.txt
+*.csv
+*.rst
+*.yml
+*.yaml
+*.xml
+*.cfg
+*.conf
+*.ini
+*.env
+*.todo
