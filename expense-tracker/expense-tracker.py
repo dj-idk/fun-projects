@@ -58,9 +58,12 @@ class ExpenseTracker:
     def update_expense(self, expense_id, amount, description, category):
         for expense in self.expenses["expenses"]:
             if expense["id"] == int(expense_id):
-                expense["amount"] = amount
-                expense["description"] = description
-                expense["category"] = category
+                if amount:
+                    expense["amount"] = amount
+                if description:
+                    expense["description"] = description
+                if category:
+                    expense["category"] = category
                 expense["updated_at"] = datetime.now().isoformat()
                 self.save_expenses()
                 print(f"Expense {expense_id} was successfully updated.")
@@ -79,14 +82,17 @@ class ExpenseTracker:
         print("Error: Expense not found.")
 
     def list_expenses(self):
-        print("# ID   Date        Description   Amount")
+        print("# ID   Date        Description    Amount")
         for expense in self.expenses["expenses"]:
             date = expense["created_at"].split("T")[0]  # Extract YYYY-MM-DD
             print(
                 f"# {expense['id']}   {date}   {expense['description']}   ${expense['amount']}"
             )
 
-    def view_expenses_by_month(self, month, year=datetime.now().year):
+    def view_expenses_by_month(self, month, year=None):
+        if year is None:
+            year = datetime.now().year  # Assign current year if no year is provided
+
         total = 0
         for expense in self.expenses["expenses"]:
             expense_date = datetime.fromisoformat(expense["updated_at"])
@@ -118,11 +124,6 @@ class ExpenseTracker:
             print(f"Total expenses for month {month}: ${total}")
         else:
             print(f"Total expenses: ${self.expenses['summary']}")
-
-    def set_monthly_budget(self, month, budget):
-        self.expenses["monthly_budget"] = {month: budget}
-        self.save_expenses()
-        print(f"Monthly budget for {month} set to {budget}")
 
     def export_expenses(self, file):
         try:
@@ -171,32 +172,26 @@ def main():
     list_parser = subparsers.add_parser("list", help="List all expenses")
 
     # View Expenses by month
-    view_parser = subparsers.add_parser("monthly", help="View expenses by month")
-    view_parser.add_argument(
+    monthly_parser = subparsers.add_parser("monthly", help="View expenses by month")
+    monthly_parser.add_argument(
         "--month", type=int, required=True, help="Month to filter by(1-12)"
     )
-    view_parser.add_argument("--year", type=int, help="Year to filter by")
+    monthly_parser.add_argument("--year", type=int, help="Year to filter by")
 
     # View Expenses by category
     category_parser = subparsers.add_parser(
         "category", help="View expenses by category"
     )
     category_parser.add_argument(
-        "--category", type=str, required=True, help="Category to filter by"
+        "--category",
+        type=str,
+        default="General",
+        help="Category to filter by",
     )
 
     # View Summary
     summary_parser = subparsers.add_parser("summary", help="View expense summary")
     summary_parser.add_argument("--month", type=int, help="Filter by month")
-
-    # Set Monthly Budget
-    budget_parser = subparsers.add_parser("budget", help="Set monthly budget")
-    budget_parser.add_argument(
-        "--month", type=int, required=True, help="Month to set budget for"
-    )
-    budget_parser.add_argument(
-        "--budget", type=float, required=True, help="Monthly budget"
-    )
 
     # Export Expenses
     export_parser = subparsers.add_parser("export", help="Export expenses to a file")
@@ -221,8 +216,6 @@ def main():
         tracker.view_expenses_by_category(args.category)
     elif args.command == "summary":
         tracker.view_summary(args.month)
-    elif args.command == "budget":
-        tracker.set_monthly_budget(args.month, args.budget)
     elif args.command == "export":
         tracker.export_expenses(args.file)
     else:
