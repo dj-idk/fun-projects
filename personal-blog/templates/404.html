@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Page Not Found</title>
+    <link href="{{ url_for('static', path='/output.css') }}" rel="stylesheet" />
+    <style>
+      /* Add smooth transition animation for the content */
+      .fade-in {
+        animation: fadeIn 1s ease-in-out forwards;
+      }
+
+      @keyframes fadeIn {
+        0% {
+          opacity: 0;
+        }
+
+        100% {
+          opacity: 1;
+        }
+      }
+
+      /* Centered content styling */
+      .centered {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 80vh;
+        flex-direction: column;
+        text-align: center;
+      }
+    </style>
+  </head>
+
+  <body class="bg-gray-100 font-sans">
+    <header class="bg-gray-600 text-white text-center py-8">
+      <h1 class="text-4xl font-bold">Oops! Page Not Found</h1>
+    </header>
+
+    <main class="py-12 px-6 mb-14">
+      <div class="centered fade-in">
+        <h2 class="text-2xl font-semibold text-gray-800">
+          Sorry, the page you're looking for does not exist.
+        </h2>
+        <p class="text-gray-600 mt-4">
+          It seems like the page was removed, or the URL was typed incorrectly.
+        </p>
+        <a
+          href="{{ url_for('view_home') }}"
+          class="text-indigo-600 mt-6 inline-block text-lg font-semibold"
+        >
+          Go back to Home
+        </a>
+      </div>
+    </main>
+
+    <footer
+      class="bg-gray-600 text-white text-center py-4 fixed bottom-0 left-0 w-[100%]"
+    >
+      <p>&copy; 2025 Minimal Personal Blog. All rights reserved.</p>
+    </footer>
+  </body>
+</html>

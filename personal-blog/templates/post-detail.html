@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Post Detail</title>
+    <link href="{{ url_for('static', path='/output.css') }}" rel="stylesheet" />
+    <style>
+      .back-btn {
+        transition: background-color 0.3s ease, transform 0.3s ease;
+      }
+
+      .back-btn:hover {
+        background-color: #7d7d7d;
+        transform: scale(1.05);
+      }
+    </style>
+  </head>
+
+  <body class="bg-gray-100 font-sans">
+    <header class="bg-gray-600 text-white text-center py-8">
+      <h1 class="text-4xl font-bold select-none">{{ post.name }}</h1>
+    </header>
+
+    <main class="py-12 px-6">
+      <div
+        class="max-w-4xl mx-auto bg-white rounded-lg shadow-lg p-8 space-y-6 mb-10"
+      >
+        <div>
+          <h2 class="text-3xl font-semibold text-gray-800 select-none">
+            {{ post.name }}
+          </h2>
+          <p class="text-gray-300 text-sm mt-2 select-none">
+            Published on
+            <span class="font-semibold"
+              >{{ post.created_at | ordinal_date }}</span
+            >
+          </p>
+        </div>
+
+        <div>
+          <p class="text-lg text-gray-700 mt-6 select-none">
+            {{post.description}}
+          </p>
+        </div>
+
+        <div class="flex justify-start mt-6">
+          <a
+            href="{{ url_for('view_home') }}"
+            class="back-btn bg-gray-600 text-white py-2 px-4 rounded-lg m-auto select-none cursor-pointer"
+            >Back to Home</a
+          >
+        </div>
+      </div>
+    </main>
+
+    <footer
+      class="bg-gray-600 text-white text-center py-4 fixed bottom-0 left-0 w-[100%] select-none"
+    >
+      <p>&copy; 2025 Minimal Personal Blog. All rights reserved.</p>
+    </footer>
+  </body>
+</html>

@@ -59,3 +59,8 @@ Thumbs.db
 *.ini
 *.env
 *.todo
+!package.json
+!package-lock.json
+
+# Node Module
+node_modules

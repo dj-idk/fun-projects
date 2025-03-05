@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Minimal Landing Page</title>
+    <link href="{{ url_for('static', path='/output.css') }}" rel="stylesheet" />
+    <style>
+      .card {
+        transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+      }
+
+      .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+      }
+
+      .fade-in {
+        animation: fadeIn 1s ease-in-out forwards;
+      }
+
+      @keyframes fadeIn {
+        0% {
+          opacity: 0;
+        }
+
+        100% {
+          opacity: 1;
+        }
+      }
+    </style>
+  </head>
+
+  <body class="bg-gray-100 font-sans">
+    <header class="bg-gray-600 text-white text-center py-8">
+      <h1 class="text-4xl font-bold select-none">Personal Blog</h1>
+    </header>
+
+    <main class="py-12 px-6 mb-14">
+      <div
+        class="container mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
+      >
+        {% for post in posts %}
+        <div class="card bg-white rounded-lg shadow-lg p-6 fade-in">
+          <h2 class="text-xl font-semibold text-gray-800 select-none">
+            {{post.name}}
+          </h2>
+          <p class="text-gray-200 mt-4 text-sm select-none">
+            {{ post.created_at | ordinal_date }}
+          </p>
+          <p class="text-gray-600 mt-4 select-none">
+            {{ post.description[:250] }}{% if post.description|length > 250
+            %}...{% endif %}
+          </p>
+          <a
+            href="{{ url_for('view_details', id=post.id) }}"
+            class="text-indigo-600 mt-4 inline-block bottom-10 left-10 select-none cursor-pointer"
+            >Read More</a
+          >
+          >
+        </div>
+        {% endfor %}
+      </div>
+    </main>
+    <footer
+      class="bg-gray-600 text-white text-center py-4 fixed bottom-0 left-0 w-[100%] select-none"
+    >
+      <p>&copy; 2025 Minimal Personal Blog. All rights reserved.</p>
+    </footer>
+  </body>
+</html>
