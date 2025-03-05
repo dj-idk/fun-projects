@@ -39,8 +39,8 @@ class ExpenseTracker:
         description,
         category="General",
     ):
-        expnses = self.expenses["expenses"]
-        new_id = max((expense["id"] for expense in expnses), default=0) + 1
+        expenses = self.expenses["expenses"]
+        new_id = max((expense["id"] for expense in expenses), default=0) + 1
         new_expense = {
             "id": new_id,
             "amount": amount,
@@ -49,8 +49,8 @@ class ExpenseTracker:
             "created_at": datetime.now().isoformat(),
             "updated_at": datetime.now().isoformat(),
         }
-        expnses.append(new_expense)
-        self.expenses["total_count"] = len(expnses)
+        expenses.append(new_expense)
+        self.expenses["total_count"] = len(expenses)
         self.expenses["summary"] += amount
         self.save_expenses()
         print(f"Expense {new_id} was successfully added.")
