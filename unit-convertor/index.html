@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unit Converter</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 30px;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            width: 90%;
+            max-width: 400px;
+            text-align: center;
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h2 {
+            color: #fff;
+            margin-bottom: 15px;
+        }
+
+        input, select, button {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: 0.3s;
+        }
+
+        input, select {
+            background: rgba(255, 255, 255, 0.6);
+        }
+
+        input:focus, select:focus {
+            background: rgba(255, 255, 255, 0.9);
+            outline: none;
+        }
+
+        button {
+            background: #ff6b6b;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        button:hover {
+            background: #ff4757;
+            transform: scale(1.05);
+        }
+
+        #result {
+            margin-top: 15px;
+            font-size: 20px;
+            color: white;
+            font-weight: bold;
+            transition: opacity 0.5s ease-in-out;
+        }
+
+        .hidden {
+            opacity: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Unit Converter</h2>
+        <input type="number" id="value" placeholder="Enter value" required>
+        
+        <select id="category">
+            <option value="length">Length</option>
+            <option value="weight">Weight</option>
+            <option value="temperature">Temperature</option>
+        </select>
+        
+        <label>From</label>
+        <select id="from_unit"></select>
+        
+        <label>To</label>
+        <select id="to_unit"></select>
+        
+        <button onclick="convert()">Convert</button>
+        <h3 id="result" class="hidden"></h3>
+    </div>
+
+    <script>
+        const units = {
+            length: ["millimeter", "centimeter", "meter", "kilometer", "inch", "foot", "yard", "mile"],
+            weight: ["milligram", "gram", "kilogram", "ounce", "pound"],
+            temperature: ["Celsius", "Fahrenheit", "Kelvin"]
+        };
+
+        function updateUnits() {
+            let category = document.getElementById("category").value;
+            let fromUnit = document.getElementById("from_unit");
+            let toUnit = document.getElementById("to_unit");
+
+            fromUnit.innerHTML = toUnit.innerHTML = "";
+            units[category].forEach(unit => {
+                fromUnit.innerHTML += `<option value="${unit}">${unit}</option>`;
+                toUnit.innerHTML += `<option value="${unit}">${unit}</option>`;
+            });
+        }
+
+        async function convert() {
+            let value = document.getElementById("value").value;
+            let fromUnit = document.getElementById("from_unit").value;
+            let toUnit = document.getElementById("to_unit").value;
+            let category = document.getElementById("category").value;
+            let resultText = document.getElementById("result");
+
+            if (value === "" || isNaN(value)) {
+                resultText.innerText = "Please enter a valid number!";
+                resultText.classList.remove("hidden");
+                return;
+            }
+
+            let response = await fetch(`/convert?value=${value}&from_unit=${fromUnit}&to_unit=${toUnit}&category=${category}`);
+            let data = await response.json();
+            
+            resultText.innerText = `Result: ${data.converted_value}`;
+            resultText.classList.remove("hidden");
+        }
+
+        document.getElementById("category").addEventListener("change", updateUnits);
+        updateUnits();
+    </script>
+</body>
+</html>
