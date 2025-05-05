@@ -1,47 +1,46 @@
 def organize_ingredients(ingredients):
     """
     Organizes recipe ingredients by category.
-    
+
     Args:
         ingredients: List of ingredient tuples
-        
+
     Returns:
         Dictionary with categories as keys and lists of ingredient details as values
     """
     organized_ingredients = {}
-    
+
     for ingredient in ingredients:
         match ingredient:
             case (name, amount, unit, category, *extra):
                 is_special = "special" in extra
                 notes = [note for note in extra if note != "special"]
-                
+
             case (name, amount, unit, category):
                 is_special = False
                 notes = []
-                
+
             case (name, amount, unit):
                 category = "miscellaneous"
                 is_special = False
                 notes = []
-                
+
             case _:
                 print(f"Warning: Unexpected ingredient format: {ingredient}")
                 continue
-        
-        if category not in organized_ingredients:
-            organized_ingredients[category] = []
-        
+
+        category_list = organized_ingredients.setdefault(category, [])
+
         ingredient_details = {
             "name": name,
             "amount": amount,
             "unit": unit,
             "notes": notes,
-            "special": is_special
+            "special": is_special,
         }
-        
+
         combined = False
-        for existing in organized_ingredients[category]:
+        for existing in category_list:
             if existing["name"] == name and existing["unit"] == unit:
                 existing["amount"] += amount
                 for note in notes:
@@ -50,10 +49,10 @@ def organize_ingredients(ingredients):
                 existing["special"] |= is_special
                 combined = True
                 break
-        
+
         if not combined:
-            organized_ingredients[category].append(ingredient_details)
-    
+            category_list.append(ingredient_details)
+
     return organized_ingredients
 
 
@@ -83,7 +82,7 @@ ingredients = [
     ("powdered sugar", 2, "cups", "dry", "sweetener", "sifted", "for frosting"),
     ("heavy cream", 0.25, "cup", "liquid", "cold", "whipped"),
     ("strawberries", 1, "cup", "fruit", "sliced", "for garnish"),
-    ("food coloring", 3, "drops", "special", "red")
+    ("food coloring", 3, "drops", "special", "red"),
 ]
 
 organized_ingredients = organize_ingredients(ingredients)
