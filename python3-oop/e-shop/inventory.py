@@ -5,6 +5,7 @@ from typed_product import (
     DigitalElectronic,
     PhysicalClothing,
 )
+from item_type import PhysicalItem, DigitalItem
 
 
 def get_valid_input(prompt, valid_options):
@@ -103,13 +104,11 @@ class Inventory:
 
     def get_physical_products(self):
         """Get all physical products in the inventory."""
-        from item_type import PhysicalItem
 
         return [p for p in self.products if isinstance(p, PhysicalItem)]
 
     def get_digital_products(self):
         """Get all digital products in the inventory."""
-        from item_type import DigitalItem
 
         return [p for p in self.products if isinstance(p, DigitalItem)]
 
@@ -123,7 +122,6 @@ class Inventory:
 
     def generate_download_links_for_user(self, user_id):
         """Generate download links for a user's digital purchases."""
-        from item_type import DigitalItem
 
         digital_products = [p for p in self.products if isinstance(p, DigitalItem)]
 
@@ -140,8 +138,6 @@ class Inventory:
 
     def calculate_shipping_for_order(self, product_skus, distance):
         """Calculate total shipping cost for an order."""
-        from item_type import PhysicalItem
-
         total_shipping = 0
         products_found = []
 
